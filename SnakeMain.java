@@ -8,6 +8,7 @@ public class SnakeMain extends JFrame{
 		setSize(435, 390);
 		setLocation(200, 200);
 		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//将panel添加到frame中
 		add(new SnakeWin());
 	}
