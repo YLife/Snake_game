@@ -1,5 +1,9 @@
 package game;
-
+/**
+ *蛇块类，封装蛇块想，y轴的坐标信息
+ * @author Administrator
+ *
+ */
 public class SnakeAct {
 	private int x;
 	private int y;
