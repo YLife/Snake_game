@@ -1,12 +1,22 @@
 package game;
 /**
- *蛇块类，封装蛇块想，y轴的坐标信息
+ * 封装蛇块x，y轴的坐标信息
  * @author Administrator
  *
  */
 public class SnakeAct {
 	private int x;
 	private int y;
+
+	public SnakeAct() {
+		super();
+	}
+
+	public SnakeAct(int x, int y) {
+		super();
+		this.x = x;
+		this.y = y;
+	}
 	
 	public int getX() {
 		return x;

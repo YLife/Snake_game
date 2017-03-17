@@ -7,27 +7,30 @@ import java.util.List;
 
 import javax.swing.*;
 
-
+/**
+ * 游戏窗口（面板）
+ * @author Mr.Yang
+ *
+ */
 public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runnable{
-	JButton startGame,stopGame;
-	int score=0,speed=0;
-	boolean start=false;
-	int rx,ry;
-	Random r=new Random();
+	
+	private static final long serialVersionUID = 1L;
+	private JButton startGame,stopGame;
+	private int score=0,speed=0;
+	private boolean start=false;
+	private int rx,ry;
+	private Random r=new Random();
 	
 	//创建一个集合来存放蛇块
-	static List<SnakeAct> list =new ArrayList<>();
-	int temp=0,tempEat1=0,tempEat2=0;
+	private static List<SnakeAct> list = new ArrayList<>();
+	private int temp=0,tempEat1=0,tempEat2=0;
 	
 	//创建结束游戏对话框
-	JDialog dialog = new JDialog();
-	JLabel label = new JLabel("你挂了！你得分数是："+score);
-	JButton ok = new JButton("Game over!");
-	
-	//创建线程
+	private JDialog dialog = new JDialog();
+	private JLabel label = new JLabel("你挂了！你得分数是："+score);
+	private JButton ok = new JButton("Game over!");
 	Thread th;
 	
-	//游戏窗口布局构造器
 	public SnakeWin(){
 		startGame=new JButton("开始");
 		stopGame=new JButton("结束");
@@ -62,8 +65,11 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 		//随机生成蛇块
 		if (start) {
 			g.fillRect(10+rx*10, 40+ry*10, 10, 10);
-			g.setColor(new Color(255, 0, 0));
+			//？？？？？？？？线程导致
+			g.setColor(new Color(201, 201,201));
+			System.out.println(list.size());
 			for (int i = 0; i < list.size(); i++) {
+				//？？？？？？重复动作太多
 				g.fillRect(10+list.get(i).getX()*10, 40+list.get(i).getY()*10, 10, 10);
 			}
 		}
@@ -75,8 +81,8 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//开始游戏
 		if (e.getSource()==startGame) {
-			//将开始按钮设置为不可修改
 			startGame.setEnabled(false);
 			start=true;
 			//生成x，y轴随机数
@@ -91,9 +97,9 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 			this.requestFocus(true);
 			th = new Thread(this);
 			th.start();
-			//重新绘制组件
 			repaint();
 		}
+		//结束游戏
 		if (e.getSource()==stopGame) {
 			System.exit(0);
 		}
@@ -141,6 +147,7 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 		SnakeAct tempAct = new SnakeAct();
 		for (int i = 0; i < list.size(); i++) {
 			if (i==1) {
+				//list变化立即刷新，此处必须赋值，否则与蛇头重合
 				list.get(i).setX(list.get(0).getX());
 				list.get(i).setY(list.get(0).getY());
 			}
@@ -170,6 +177,7 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 			dialog.setVisible(true);
 		}
 	}
+	
 	public boolean minOk(int x, int y){
 		if (maxOk(x+list.get(0).getX(),y+list.get(0).getY())) {
 			return true;
@@ -184,14 +192,17 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 	 * @return
 	 */
 	public boolean maxOk(int x,int y){
+		
 		if (x<0||x>=40||y<0||y>=30) {
 			return false;
 		}
+		
 		for (int i = 0; i < list.size(); i++) {
 			if (i>1&&list.get(0).getX()==list.get(i).getX()&&list.get(0).getY()==list.get(i).getY()) {
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
@@ -231,11 +242,10 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 	public void keyReleased(KeyEvent e) {}
 	
 	/**
-	 * 线程运行
+	 * 线程运行,设置蛇块自动移动方法
 	 */
 	@Override
 	public void run() {
-		//设置自动移动算法
 		while (start) {
 			switch (temp) {
 			case 1:
@@ -261,7 +271,5 @@ public class SnakeWin extends JPanel implements ActionListener,KeyListener,Runna
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
 }
